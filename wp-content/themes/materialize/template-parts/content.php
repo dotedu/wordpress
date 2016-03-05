@@ -9,39 +9,56 @@
 
 ?>
 
+
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-	<header class="entry-header">
-		<?php
-			if ( is_single() ) {
-				the_title( '<h1 class="entry-title">', '</h1>' );
-			} else {
-				the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
-			}
-
-		if ( 'post' === get_post_type() ) : ?>
-		<div class="entry-meta">
-			<?php materialize_posted_on(); ?>
-		</div><!-- .entry-meta -->
-		<?php
-		endif; ?>
-	</header><!-- .entry-header -->
-
-	<div class="entry-content">
-		<?php
-			the_content( sprintf(
-				/* translators: %s: Name of current post. */
-				wp_kses( __( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'materialize' ), array( 'span' => array( 'class' => array() ) ) ),
-				the_title( '<span class="screen-reader-text">"', '"</span>', false )
-			) );
-
-			wp_link_pages( array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'materialize' ),
-				'after'  => '</div>',
-			) );
-		?>
-	</div><!-- .entry-content -->
-
-	<footer class="entry-footer">
-		<?php materialize_entry_footer(); ?>
-	</footer><!-- .entry-footer -->
+	<div class="card">
+    <div class="card-image">
+		<?php if ( has_post_thumbnail() ) {
+			the_post_thumbnail();
+		} else { ?>
+			<img src="<?php bloginfo('template_directory'); ?>/img/default.png" alt="<?php the_title(); ?>" />
+		<?php } ?>
+     <span class="card-title">	
+    	<header class="entry-header">
+				<?php the_title( sprintf( '<h1 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h1>' ); ?>
+			</header><!-- .entry-header -->
+			<?php if ( 'post' == get_post_type() ) : ?>
+				<div class="entry-meta">
+					<?php materialize_posted_on(); ?>
+				</div><!-- .entry-meta -->
+			<?php endif; ?>
+		 </span>
+    </div>
+ 
+		<div class="card-content">
+			<div class="entry-content">
+				<?php
+					/* translators: %s: Name of current post */
+			
+					if (! is_single()) {
+						the_excerpt( sprintf(
+							__( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'immaterial' ),
+							the_title( '<span class="screen-reader-text">"', '"</span>', false )
+						) );
+					} else {
+						the_content( sprintf(
+							__( 'Continue reading %s <span class="meta-nav">&rarr;</span>', 'immaterial' ),
+							the_title( '<span class="screen-reader-text">"', '"</span>', false )
+						) );
+					}
+				?>
+ 
+				<?php
+					wp_link_pages( array(
+						'before' => '<div class="page-links">' . __( 'Pages:', 'immaterial' ),
+						'after'  => '</div>',
+					) );
+				?>
+			</div><!-- .entry-content -->
+		</div>
+		<div class="card-action">
+			<footer class="entry-footer">
+				<?php materialize_entry_footer(); ?>
+			</footer><!-- .entry-footer -->
+		</div>
 </article><!-- #post-## -->
